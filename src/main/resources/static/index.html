@@ -1,1 +1,185 @@
-ddd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* 기본 테이블 스타일 */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    /* 테이블 헤더 셀 스타일 */
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    /* 테이블 데이터 셀 스타일 */
+    td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    /* 짝수 행 배경색 스타일 */
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    #pagenation {
+        text-align: center;
+    }
+    /* 기본 버튼 스타일 */
+    .pagenation-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #3498db;
+    color: #3498db;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    }
+
+    /* 마우스 호버 시 색상 및 배경 변경 */
+    .pagenation-button:hover {
+    background-color: #3498db;
+    color: white;
+    }
+
+    /* 활성화 상태 스타일 (마우스 클릭 시) */
+    .pagenation-button:active {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    }
+</style>
+<body>
+    <h1>부성이 테이블</h1>
+    <div id="table1"></div>
+</body>
+</html>
+<script>
+    let DDtable = {
+        init: (divId) => {
+            this.divId = document.querySelector('#' + divId);
+        },
+        createTable: (obj) => {
+            let table = document.createElement('table');
+            let tbody = document.createElement('tbody');
+            let pagenationDiv = document.createElement('div');
+            // 헤더 생성
+            if (obj.headerList) {
+                let headerRow = document.createElement('tr');
+                headerRow.setAttribute('data-header', 'header');
+                
+                for (let i = 0; i < obj.headerList.length; i++) {
+                    let column = obj.headerList[i].column;
+                    let value = obj.headerList[i].value;
+                    let headerCell = document.createElement('th');
+                    
+                    headerCell.setAttribute('data-headerKey', column);
+                    headerCell.textContent = value;
+                    headerRow.appendChild(headerCell);
+                }
+                
+                tbody.appendChild(headerRow);
+            }
+            // td 생성
+            if (obj.dataList) {
+                const th = tbody.querySelectorAll('th');
+                
+                for (let i = 0; i < obj.dataList.length; i++) {
+                    const data = obj.dataList[i];
+                    let row = tbody.insertRow();
+                    
+                    for (let i = 0; i < th.length; i++) {
+                        let headerKey = th[i].getAttribute('data-headerKey');
+                        let dataCell = document.createElement('td');
+                        dataCell.setAttribute('data-dataCellKey', headerKey);
+                        row.appendChild(dataCell);
+                    }
+                    
+                    for (key in data) {
+                        let value = data[key];
+                        if (data.hasOwnProperty(key)) {
+                            let targetTd = row.querySelector('[data-dataCellKey="' + key + '"]');
+                            targetTd.textContent = value;
+                        }
+                    }
+                }
+            }
+            
+            // 페이지 번호 생성
+            if (obj.pagenation && parseInt(obj.pagenation) > 0) {
+                let pagenationLength = parseInt(obj.pagenation);
+                
+                for (let i = 0; i < pagenationLength; i++) {
+                    let pageButton = document.createElement('button');
+                    pageButton.textContent = i + 1;
+                    pageButton.setAttribute('id', 'pagenation');
+                    pageButton.setAttribute('class', 'pagenation-button');
+                    pagenationDiv.appendChild(pageButton);
+                }
+                
+            }
+            
+            table.appendChild(tbody);
+            this.divId.appendChild(table);
+            this.divId.appendChild(pagenationDiv);
+        }
+    }
+
+    let data = {
+        headerList: [
+            {column: 'num', value: '번호'},
+            {column: 'title', value: '제목'},
+            {column: 'writer', value: '작성자'},
+            {column: 'viewCount', value: '조회수'},
+            {column: 'regDate', value: '날짜'},
+        ],
+        dataList: [
+            {
+                num: 1,
+                title: '제목1',
+                writer: '작성자1',
+                viewCount: 0,
+                regDate: '2023-11-04',
+            },
+            {
+                num: 2,
+                title: '제목2',
+                writer: '작성자2',
+                viewCount: 0,
+                regDate: '2023-11-04',
+            },
+            {
+                num: 3,
+                title: '제목3',
+                writer: '작성자3',
+                viewCount: 0,
+                regDate: '2023-11-04',
+            },
+            {
+                num: 4,
+                title: '제목4',
+                writer: '작성자4',
+                viewCount: 0,
+                regDate: '2023-11-04',
+            },
+        ],
+        pagenation: 10,
+    }
+
+    DDtable.init('table1');
+    DDtable.createTable(data);
+
+</script>
