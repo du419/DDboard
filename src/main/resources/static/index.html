@@ -58,8 +58,8 @@
 
     /* 활성화 상태 스타일 (마우스 클릭 시) */
     .pagenation-button:active {
-    background-color: #2980b9;
-    border-color: #2980b9;
+        background-color: #2980b9;
+        border-color: #2980b9;
     }
 </style>
 <body>
@@ -76,6 +76,7 @@
             let table = document.createElement('table');
             let tbody = document.createElement('tbody');
             let pagenationDiv = document.createElement('div');
+            pagenationDiv.style.textAlign = 'center';
             // 헤더 생성
             if (obj.headerList) {
                 let headerRow = document.createElement('tr');
